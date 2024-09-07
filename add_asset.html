@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Sell Assets - AssetManager</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">AssetManager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="add_asset.html">Add/Sell Assets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="view_assets.html">View Assets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="asset_history.html">Asset History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Add or Sell Assets</h2>
+        <form id="assetForm">
+            <div class="form-group">
+                <label for="assetName">Asset Name</label>
+                <input type="text" class="form-control" id="assetName" required>
+            </div>
+            <div class="form-group">
+                <label for="assetDescription">Description</label>
+                <textarea class="form-control" id="assetDescription" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="assetPrice">Price ($)</label>
+                <input type="number" class="form-control" id="assetPrice" required>
+            </div>
+            <div class="form-group">
+                <label for="assetImage">Asset Image</label>
+                <input type="file" class="form-control-file" id="assetImage" accept="image/*">
+                <img id="imagePreview" src="#" alt="Image Preview" style="display:none; margin-top: 10px; max-width: 100%; height: auto;">
+            </div>
+            <button type="submit" class="btn btn-success btn-block">Add Asset</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $('#assetImage').on('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#imagePreview').attr('src', e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $('#imagePreview').hide();
+            }
+        });
+
+        $(document).ready(function() {
+            $('#assetForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const name = $('#assetName').val();
+                const description = $('#assetDescription').val();
+                const price = parseFloat($('#assetPrice').val());
+
+                // Retrieve assets from localStorage
+                const assets = JSON.parse(localStorage.getItem('assets')) || [];
+
+                // Add new asset
+                assets.push({ name: name, description: description, price: price });
+                localStorage.setItem('assets', JSON.stringify(assets));
+
+                alert('Asset added successfully!');
+                $('#assetForm')[0].reset();
+                $('#imagePreview').hide();
+            });
+        });
+    </script>
+</body>
+</html>

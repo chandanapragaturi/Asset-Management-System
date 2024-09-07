@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset History - AssetManager</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">AssetManager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="add_asset.html">Add/Sell Assets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="view_assets.html">View Assets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="asset_history.html">Asset History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+            <button class="btn btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>Asset History</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Action</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price ($)</th>
+                    </tr>
+                </thead>
+                <tbody id="historyList">
+                    <!-- History will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const history = JSON.parse(localStorage.getItem('history')) || [];
+
+            history.forEach(record => {
+                const actionClass = record.action === 'Added' ? 'text-success' : 'text-danger';
+                $('#historyList').append(`
+                    <tr>
+                        <td class="${actionClass}">${record.action}</td>
+                        <td>${record.asset.name}</td>
+                        <td>${record.asset.description}</td>
+                        <td>${record.asset.price.toFixed(2)}</td>
+                    </tr>
+                `);
+            });
+        });
+    </script>
+</body>
+</html>

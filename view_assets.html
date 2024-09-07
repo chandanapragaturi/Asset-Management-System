@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Assets - AssetManager</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">AssetManager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="add_asset.html">Add/Sell Assets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="view_assets.html">View Assets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="asset_history.html">Asset History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>View Assets</h2>
+        <input type="text" class="form-control mb-3" id="searchBar" placeholder="Search assets by name">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price ($)</th>
+                    </tr>
+                </thead>
+                <tbody id="assetsList">
+                    <!-- Assets will be populated here -->
+                </tbody>
+            </table>
+        </div>
+        <h4 class="mt-4">Total Worth: $<span id="totalWorth">0</span></h4>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const assets = JSON.parse(localStorage.getItem('assets')) || [];
+            let totalWorth = 0;
+
+            function displayAssets(filteredAssets) {
+                $('#assetsList').empty();
+                filteredAssets.forEach(asset => {
+                    $('#assetsList').append(`
+                        <tr>
+                            <td>${asset.name}</td>
+                            <td>${asset.description}</td>
+                            <td>${asset.price.toFixed(2)}</td>
+                        </tr>
+                    `);
+                    totalWorth += asset.price;
+                });
+                $('#totalWorth').text(totalWorth.toFixed(2));
+            }
+
+            displayAssets(assets);
+
+            $('#searchBar').on('keyup', function() {
+                const query = $(this).val().toLowerCase();
+                const filteredAssets = assets.filter(asset => asset.name.toLowerCase().includes(query));
+                totalWorth = 0;
+                displayAssets(filteredAssets);
+            });
+        });
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

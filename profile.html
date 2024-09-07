@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - AssetManager</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">AssetManager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="add_asset.html">Add/Sell Assets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="view_assets.html">View Assets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="asset_history.html">Asset History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Profile</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">User Profile</h5>
+                <p class="card-text">Name: <span id="userName">John Doe</span></p>
+                <p class="card-text">Phone: <span id="userPhone">123-456-7890</span></p>
+                <p class="card-text">Email: <span id="userEmail">johndoe@example.com</span></p>
+                <!-- Add any other profile information you want to display -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                $('#userName').text(user.name);
+                $('#userPhone').text(user.phone);
+                $('#userEmail').text(user.email);
+            } else {
+                alert('Please login first.');
+                window.location.href = 'login.html';
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
